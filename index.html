@@ -1385,6 +1385,47 @@ const icebergMaterial = new THREE.MeshPhysicalMaterial({
             updateCameraPosition();
         }
     });
+
+
+ // LAST FEATURE :) --->  Touch Controls (Mobile)
+
+        let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', (event) => {
+        const touch = event.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+    });
+
+    document.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+
+        if (gameStarted) {
+            // Simulate bear rotation with horizontal swipe
+            bear.rotation.y -= deltaX * 0.002;
+            updateCameraPosition();
+
+            // Simulate movement with vertical swipe
+            if (deltaY < -30) {
+                moveForward = true;
+                moveBackward = false;
+            } else if (deltaY > 30) {
+                moveBackward = true;
+                moveForward = false;
+            } else {
+                moveForward = false;
+                moveBackward = false;
+            }
+        }
+    });
+
+    document.addEventListener('touchend', () => {
+        moveForward = false;
+        moveBackward = false;
+    });
 }
 
         function updateCameraPosition() {
